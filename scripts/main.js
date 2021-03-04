@@ -36,28 +36,27 @@ class MoviesApp {
         } = movie;
         return `<tr data-id="${id}" data-year="${year}"><td><img src="${image}"></td><td>${title}</td><td>${genre}</td><td>${year}</td></tr>`;
     }
-
+    //This homework is a production of the collaboration with İrem Kenar
+    
+    //To create year radio buttons dynamically
     createYearRadioBtn(year, yearCount) {
         return `<div class="form-check">
-            <input class="form-check-input" type="radio" name="year"  value=${year}>
+            <input class="form-check-input" type="radio" name="year" id = ${year}  value=${year}>
                <label class="form-check-label" for=${year}>
                 ${year} (${yearCount})
               </label>
                </div>`;
     }
+    //To insert year with number to radio buttons on html
 
     addToRadioBtn(content) {
-        const $el = document.querySelectorAll(".box")[1];
+        const $el = document.getElementById("filter-by-year");
         //
         $el.insertAdjacentHTML("afterbegin", content);
     }
 
-    putRadioBtnInHtml() {
-        // for(let i = 0; i < data.length; i++) {
-        //      this.addToRadioBtn(this.createYearRadioBtn(data[i]));
-        // }
-    }
 
+    //To create genre check buttons dynamically
     createGenreCheckBtn(genre, genreCount) {
         return `<div class="form-check">
              <input class="form-check-input" type="checkbox" id="genre-${genre}" name="genre" value=${genre}>
@@ -67,17 +66,24 @@ class MoviesApp {
     </div>`;
     }
 
+    // To insert genre with number check buttons on html
     addToCheckBtn(content) {
-        const $el = document.querySelectorAll(".box")[2];
-        console.log($el);
+        const $el = document.getElementById("filter-by-genre");
         $el.insertAdjacentHTML("afterbegin", content);
     }
 
-    putCheckBtnInHtml() {
+    //To create a movie object that includes only years and genre from data.js
+    createMovieObjects() {
         const movieObj = {
-            sortByYear: {},
-            sortByGenre: {},
+            sortByYear : {},
+            sortByGenre : {}
         };
+        return movieObj;
+    }
+
+    //To bind events for creation and insertion of radio and check buttons to html
+    putBtnsInHtml() {
+        const movieObj = this.createMovieObjects();
 
         for (let i = 0; i < data.length; i++) {
             if (!movieObj.sortByYear[data[i].year]) {
@@ -109,7 +115,6 @@ class MoviesApp {
             this.addToCheckBtn($radioBtn);
         }
 
-        console.log(movieObj);
     }
 
     fillTable() {
@@ -140,11 +145,20 @@ class MoviesApp {
                     return searchMovieByTitle(movie, searchValue);
                 })
                 .forEach(makeBgActive);
+                this.clearSearchInput();
         });
+    }
+    //To clear input value after each search event
+    clearSearchInput() {
+        this.$searchInput.value = "";
     }
 
     handleYearFilter() {
         this.$yearSubmitter.addEventListener("click", () => {
+            //To control any future additions
+            if(!this.yearHandler === "year") {
+                return;
+            }
             this.reset();
             const selectedYear = document.querySelector(
                 `input[name='${this.yearHandler}']:checked`
@@ -160,6 +174,7 @@ class MoviesApp {
 
     handleGenreFilter() {
         this.$genreSubmitter.addEventListener("click", () => {
+            //To control any future additions
             if (!this.genreHandler == "genre") {
                 return;
             }
@@ -186,11 +201,13 @@ class MoviesApp {
         });
     }
 
+   
+
     init() {
         this.fillTable();
         this.handleSearch();
         this.handleYearFilter();
-        this.putCheckBtnInHtml();
+        this.putBtnsInHtml();
         this.handleGenreFilter();
     }
 }
@@ -207,19 +224,22 @@ let myMoviesApp = new MoviesApp({
 
 myMoviesApp.init();
 
-// 1. Year ve genre secenekleri mevcut datanin icindeki alanlardan olusmali ve yanlarina parantes icinde sayilari yazilmali.
+const addMinutesToDate = (date, minutes) => {
+    const dateTimestamp = date.getTime();
+    console.log(dateTimestamp);
+    const minutesTimestamp = minutes * 60000;
+    console.log(minutesTimestamp);
+    return new Date(dateTimestamp + minutesTimestamp);
+  };
 
-// Ornegin data icerisinde 2 adet Action 3 adet Drama filmi var ise secenekler.
+  addMinutesToDate(new Date, 15);
+  
+ const getRemainingDate = (date) => {
+    const total = Date.parse(date) - Date.parse(getNow());
+    const seconds = Math.floor((total / 1000) % 60);
+    const minutes = Math.floor((total / 1000 / 60) % 60);
+    return { total, seconds, minutes };
+  };
 
-// - Action(2)
-// - Drama(3)
-
-// seklinde olmali
-
-// 2. Genre'ye gore filtereleme yapalim. Burdaki filtreleme year'dan farkli olarak
-// coklu secim yapmaya da izin veriyor. Action ve drama secili ise hem action hem drama filmleri tabloda background rengi farkli olarak gosterilmeli.
-
-// #### Bonus
-// - search yapildiktan sonra search yapilan inputu bosaltalim.
-
+  
 

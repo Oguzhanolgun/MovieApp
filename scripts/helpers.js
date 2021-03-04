@@ -2,11 +2,12 @@ export const searchMovieByTitle = (movie, searchValue) => {
     return movie.title.toLowerCase().indexOf(searchValue.toLowerCase()) > -1;
 }
 
-const bgColorChoise = (genre) => {
+const bgColorChoice = (genre) => {
     if (!genre) {
         return;
     }
-
+   
+    //To show different colors per genre
     const colorEnum = {
         "Action": "#7d7b7b",
         "Drama": "#efd7f7",
@@ -20,7 +21,7 @@ const bgColorChoise = (genre) => {
 }
 
 export const makeBgActive = (movie) => {
-    const bgColor = bgColorChoise(movie.genre);
+    const bgColor = bgColorChoice(movie.genre);
     document.querySelector(`tr[data-id='${movie.id}']`).style.background = bgColor;
 
 }
